@@ -37,14 +37,14 @@ class DateAdapter:
         self.date = date
         
     def start(self):
-        return self.date.replace(hour=9, minute=0, second=0, microsecond=0)
+        return self.date.replace(hour=9, minute=0, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:%S')
         pass
     
     
     def finish(self, custom_end : datetime = None):
         if custom_end:
-            return self.date.replace(hour=0, minute=0, second=0, microsecond=0) + custom_end
+            return self.date.replace(hour=17, minute=0, second=0, microsecond=0) + custom_end
             pass
             
         else:
-            return self.date.replace(hour=17, minute=0, second=0, microsecond=0)
+            return self.date.replace(hour=17, minute=0, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:%S')
