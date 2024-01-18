@@ -22,12 +22,13 @@ class BookingAutomation:
         # Set up logging
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
+        self.bookingInfo = {}
 
         # Set up chrome profile (Use Default)
         self.logger.info('Creating Google Chrome Driver')
         options = uc.ChromeOptions()
         options.add_argument("--user-data-dir=/home/ruiz/.config/google-chrome/") # Change the path according to your system
-        options.add_argument("--profile-directory=Profile 1") # Change to Profile 1 for testing 
+        options.add_argument("--profile-directory=Default") # Change to Profile 1 for testing 
         self.driver = uc.Chrome(options=options)
 
         # Maximize the window
@@ -112,13 +113,15 @@ class BookingAutomation:
         
     def filters(self):
         self.logger.info(f'Applying filters\n   - High Resolution monitor: {self.HighResolutionMonitor}\n  \
-                                                - Adjustable Height Desk:{self.AdjustableHeightDesk}')
+            - Adjustable Height Desk:{self.AdjustableHeightDesk}')
+        
         if self.HighResolutionMonitor:
             try:
-                self.logger.info('High Resolution Monitor selected')
-                monitor = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[1]/iwms-wsd-reservable-filter/div/div[4]/ul/li[1]')
+                self.logger.info('Selecting High Resolution Monitor')
+                monitor = self.driver.find_element(By.XPATH, '//*[@id="chk13b0c35f879269d03cc2ca64dabb350d"]')
                 monitor.click()
                 time.sleep(0.1)
+                self.logger.info('High Resolution Montitor selected')
                 
             except: # noqa: E722
                 
@@ -126,10 +129,11 @@ class BookingAutomation:
             
         if self.AdjustableHeightDesk:
             try:
-                self.logger.info('Adjustable Height Desk selected')
-                desk = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[1]/iwms-wsd-reservable-filter/div/div[4]/ul/li[2]')
+                self.logger.info('Selecting Adjustable Height Desk')
+                desk = self.driver.find_element(By.XPATH, '//*[@id="chka690c35f879269d03cc2ca64dabb3504"]')
                 desk.click()
                 time.sleep(0.1)
+                self.logger.info('Adjustable Height Desk selected')
                 
             except:  # noqa: E722
                 
@@ -145,20 +149,31 @@ class BookingAutomation:
         # Find all available seats
         self.logger.info('Finding available seats...')
         try:
-            seats = self.driver.find_elements(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[2]/div/div')
+            seats = self.driver.find_elements(By.CLASS_NAME, 'horizontal-card__container b r-2x horizontal-card')
         except: # noqa: E722
         # If there are no available seats, log a message and return
             if not seats:
-                self.logger.warning('No available seats found.')
+                self.logger.warning('No available seats found!')
                 return
 
         # Otherwise, book the first available seat
         self.logger.info('Booking the first available seat...')
-        seat = seats[0]
-        book_button = seat.find_element(By.CLASS_NAME, 'horizontal-card__action-button-container text-overflow-ellipsis ng-scope')
+        self.seat = seats[0]
+        book_button = self.seat.find_element(By.CLASS_NAME, 'btn btn-default horizontal-card__action-button form-control text-md text-overflow-ellipsis btn-add-card card-btn-secondary')
         book_button.click()
-        time.sleep(2)  # Wait for the booking to process
         
+    
+        
+        time.sleep(2)  # Wait for the booking to process
+       
+       
+    
+    def _seat_info(self):
+                
+        self.bookingInfo['Desk Location'] = self.seat.find_element(By.CLASS_NAME, 'horizontal-card__title horizontal-card__truncate-in-two-lines text-md ng-binding ng-scope').text
+        self.bookingInfo['Floor and Address'] = self.seat.find_element(By.CLASS_NAME, 'horizontal-card__subtitle text-muted text-overflow-ellipsis ng-binding ng-scope').text
+        return
+         
     
     
         
