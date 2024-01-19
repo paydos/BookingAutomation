@@ -5,7 +5,7 @@ import undetected_chromedriver as uc
 import logging
 from tqdm import tqdm
 
-from date import DateCalculator, DateAdapter
+from lib.date import DateCalculator, DateAdapter
 
 class BookingAutomation:
     def __init__(self):
@@ -122,7 +122,7 @@ class BookingAutomation:
                 
             except Exception as e: # noqa: E722
                 
-                self.logger.error(f'Unable to select High Resolution Monitor: {e.__class__.__name__}')
+                self.logger.error('Unable to select High Resolution Monitor: Probably not available')
             
         if self.AdjustableHeightDesk:
             try:
@@ -135,7 +135,7 @@ class BookingAutomation:
                 
             except:  # noqa: E722
                 
-                self.logger.error('Unable to select Adjustable Height Desk')
+                self.logger.error('Unable to select Adjustable Height Desk: Probably not available')
                 
         time.sleep(0.1)
         
@@ -157,7 +157,7 @@ class BookingAutomation:
         # Find all available seats
         self.logger.info('Finding available seats...')
         try:
-            seats = self.driver.find_elements(By.CLASS_NAME, 'horizontal-card__container')
+            seats = self.driver.find_element(By.CLASS_NAME, 'horizontal-card__container')
             # Check if there is at least one seat
             if seats:
                 # Find the "Add" button of the first seat

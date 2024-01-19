@@ -1,8 +1,16 @@
+import logging
 from datetime import datetime, timedelta
 
 class DateCalculator:
-    @staticmethod
-    def get_next_tuesday():
+    
+    def __init__(self):        
+    
+        logging.basicConfig(level=logging.INFO)
+        self.logger = logging.getLogger(__name__)
+
+    
+    def get_next_tuesday(self):
+        
         # Calculate the number of days until the next Tuesday
         days_to_next_tuesday = (1 - datetime.now().weekday() + 7) % 7
 
@@ -14,8 +22,10 @@ class DateCalculator:
 
         return two_weeks_tuesday.replace(microsecond=0)
 
-    @staticmethod
-    def get_next_thursday():
+    
+    def get_next_thursday(self):
+        
+        self.logger.info('Calculating date of Thursday in two weeks time')
         # Calculate the number of days until the next Thursday
         days_to_next_thursday = (3 - datetime.now().weekday() + 7) % 7
 
@@ -24,6 +34,8 @@ class DateCalculator:
 
         # Get the date of the Thursday of the week after next
         two_weeks_thursday : datetime = datetime.now() + timedelta(days=total_days_thursday)
+        
+        self.logger.info(f'Two weeks ')
 
         return two_weeks_thursday.replace(hour=9, minute=0, second=0, microsecond=0)
 
