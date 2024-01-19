@@ -27,8 +27,9 @@ class BookingAutomation:
         # Set up chrome profile (Use Default)
         self.logger.info('Creating Google Chrome Driver')
         options = uc.ChromeOptions()
+        options.add_argument("--verbose")
         options.add_argument("--user-data-dir=/home/ruiz/.config/google-chrome/") # Change the path according to your system
-        options.add_argument("--profile-directory=Default") # Change to Profile 1 for testing 
+        options.add_argument("--profile-directory=Profile 1") # Change to Profile 1 for testing 
         self.driver = uc.Chrome(options=options)
 
         # Maximize the window
@@ -53,7 +54,7 @@ class BookingAutomation:
         self.logger.info('Changing location to Castellana...')
         location = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[1]/div/div/div/div[1]/div/a/span[1]')
         location.click()
-        time.sleep(2)
+        time.sleep(1)
 
     def type_location(self):
         # Type in location
@@ -61,14 +62,9 @@ class BookingAutomation:
         address = 'Madrid, Castellana 85'
         address_box = self.driver.find_element(By.XPATH, '/html/body/div[6]/div/input')
         address_box.send_keys(address)
-        time.sleep(2)
+        time.sleep(1)
+        address_box.send_keys(Keys.ENTER)
 
-    def click_match(self):
-        # Click on match
-        self.logger.info('Clicking on address')
-        match = self.driver.find_element(By.XPATH, '/html/body/div[6]/ul/li')
-        match.click()
-        time.sleep(0.5)
 
     def choose_floor(self):
         # Choose floor
@@ -76,28 +72,23 @@ class BookingAutomation:
         self.floorNumber = '05'
         floor = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[2]/div/div/a/span[1]')
         floor.click()
-        time.sleep(0.5)
+        time.sleep(1)
 
         floor_box = self.driver.find_element(By.XPATH, '/html/body/div[7]/div/input')
         floor_box.send_keys(self.floorNumber)
         time.sleep(0.5)
         floor_box.send_keys(Keys.ENTER)
+        time.sleep(0.2)
 
-    def click_floor_match(self):
-        # Click on match
-        self.logger.info(f'Clicking on match (Floor {self.floorNumber})...')
-        match = self.driver.find_element(By.XPATH, '/html/body/div[7]/ul/li/div')
-        match.click()
-        time.sleep(0.5)
+    
 
     def choose_starting_time(self):
         # Choose starting date
         self.logger.info(f'Start time default to {self.start_time} ')
         start_time_box = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[3]/div[2]/div[1]/input')
         start_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
-        start_time_box.send_keys(Keys.DELETE)  # Delete all selected text
         time.sleep(0.1)
-        start_time_box.send_keys(self.start_time)
+        start_time_box.send_keys('2024-01-19 00:00:00')
         time.sleep(0.5)
 
     def choose_finish_time(self):
@@ -105,11 +96,16 @@ class BookingAutomation:
         self.logger.info(f'Finish time default to {self.finish_time}')
         finish_time_box = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[4]/div/div[1]/input')
         finish_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
-        finish_time_box.send_keys(Keys.DELETE)  # Delete all selected text
         time.sleep(0.1)
-        finish_time_box.send_keys(self.finish_time)  # Insert the finish time
+        finish_time_box.send_keys('2024-01-19 01:00:00')  # Insert the finish time
         time.sleep(0.5)
         
+    def init_search(self):
+        self.logger.info('Searching...')
+        time.sleep(0.1)
+        search = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[2]/div/div[2]/div/div/button')
+        search.click()
+        time.sleep(0.5)
         
     def filters(self):
         self.logger.info(f'Applying filters\n   - High Resolution monitor: {self.HighResolutionMonitor}\n  \
@@ -117,19 +113,21 @@ class BookingAutomation:
         
         if self.HighResolutionMonitor:
             try:
+                time.sleep(0.1)
                 self.logger.info('Selecting High Resolution Monitor')
                 monitor = self.driver.find_element(By.XPATH, '//*[@id="chk13b0c35f879269d03cc2ca64dabb350d"]')
                 monitor.click()
                 time.sleep(0.1)
                 self.logger.info('High Resolution Montitor selected')
                 
-            except: # noqa: E722
+            except Exception as e: # noqa: E722
                 
-                self.logger.error('Unable to select High Resolution Monitor')
+                self.logger.error(f'Unable to select High Resolution Monitor: {e.__class__.__name__}')
             
         if self.AdjustableHeightDesk:
             try:
                 self.logger.info('Selecting Adjustable Height Desk')
+                time.sleep(1)
                 desk = self.driver.find_element(By.XPATH, '//*[@id="chka690c35f879269d03cc2ca64dabb3504"]')
                 desk.click()
                 time.sleep(0.1)
@@ -138,27 +136,43 @@ class BookingAutomation:
             except:  # noqa: E722
                 
                 self.logger.error('Unable to select Adjustable Height Desk')
+                
+        time.sleep(0.1)
+        
+        try:
+            self.logger.info('Applying filters...')
+            applyFilters = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[1]/iwms-wsd-reservable-filter/div/div[4]/a')
+            applyFilters.click()
+        except Exception as e:  # noqa: E722
+            self.logger.error(f'Unable to apply filters: {e.__class__.__name__}')
+        
 
             
     def search(self):
         search_button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[2]/div/div[2]/div/div/button')
         search_button.click()
-        time.sleep(0.2)
+        time.sleep(2)
 
     def book_seat(self):
         # Find all available seats
         self.logger.info('Finding available seats...')
         try:
-            seats = self.driver.find_elements(By.CLASS_NAME, 'horizontal-card__container b r-2x horizontal-card')
-        except: # noqa: E722
-        # If there are no available seats, log a message and return
-            if not seats:
-                self.logger.warning('No available seats found!')
-                return
+            seats = self.driver.find_elements(By.CLASS_NAME, 'horizontal-card__container')
+            # Check if there is at least one seat
+            if seats:
+                # Find the "Add" button of the first seat
+                add_button = seats[0].find_element(By.CLASS_NAME, 'btn-add-card')
+                # Click the "Add" button
+                add_button.click()
+                time.sleep(2)
+            else:
+                self.logger.info('No available seats found.')
+        except Exception as e:
+            self.logger.error(f'Error booking seat: {e}')
 
         # Otherwise, book the first available seat
         self.logger.info('Booking the first available seat...')
-        self.seat = seats[0]
+        self.seat = seats
         book_button = self.seat.find_element(By.CLASS_NAME, 'btn btn-default horizontal-card__action-button form-control text-md text-overflow-ellipsis btn-add-card card-btn-secondary')
         book_button.click()
         
@@ -193,12 +207,11 @@ if __name__ == "__main__":
     booking.make_reservation()
     booking.change_location()
     booking.type_location()
-    booking.click_match()
     booking.choose_floor()
-    booking.click_floor_match()
     booking.choose_starting_time()
     booking.choose_finish_time()
-    booking.filters()
     booking.search()
+    booking.filters()
+
     booking.book_seat()
     booking.delay()
