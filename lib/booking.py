@@ -42,6 +42,7 @@ class BookingAutomation:
         self.logger.info('Creating Google Chrome Driver')
         options = uc.ChromeOptions()
         options.add_argument("--verbose")
+        options.add_argument("--headless")
         options.add_argument("--user-data-dir=/home/ruiz/.config/google-chrome/") # Change the path according to your system
         options.add_argument("--profile-directory=Profile 1") # Change to Profile 1 for testing 
         self.driver = uc.Chrome(options=options)

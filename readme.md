@@ -58,27 +58,19 @@ The project is composed of several Python scripts:
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+For this project I used Python and Selenium Webdriver and its patched version undetected-chromedriver
 
 * [Python](https://www.python.org/)
 * [Selenium WebDriver](https://www.selenium.dev/)
 * [Schedule](https://schedule.readthedocs.io/)
+* [Undetected Chromedriver](https://github.com/ultrafunkamsterdam/undetected-chromedriver)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* Python
-  ```sh
-  https://www.python.org/downloads/
-  ```
+To get a local copy up and running follow these simple steps.
 
 ### Installation
 
@@ -155,11 +147,7 @@ If you have any questions or suggestions, feel free to reach out to me:
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
-* [Python](https://www.python.org/)
-* [Selenium WebDriver](https://www.selenium.dev/)
-* [Schedule](https://schedule.readthedocs.io/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

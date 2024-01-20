@@ -1,4 +1,3 @@
-import time
 import logging
 
 from lib.booking import BookingAutomation
@@ -7,22 +6,18 @@ from lib.date import today
 from lib.cron import cron
 
 
-from tqdm import tqdm
-
 def setup():
     installer = AutoInstaller('requirements.txt')
     installer.install()
+    
+setup()
 
 def job():
     try:
         booking = BookingAutomation(day=today) # Use day = 1 or day = 3 for testing
         # Call the methods in the desired order
         booking.load_page()
-        
-        # Remove if not testing
-        for i in tqdm(range(20)):
-            time.sleep(1)
-        
+                
         # Make a reservation
         booking.make_reservation()
         
@@ -63,7 +58,6 @@ def job():
 def main():
     logging.basicConfig(force=True, filename='BookingAutomation.log', level=logging.DEBUG, format='%(asctime)s [%(levelname)s] %(message)s')
     logging.info('Booking automation service initialised.')
-    setup()
     cron(job=job)
 
 
