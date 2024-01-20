@@ -1,17 +1,29 @@
-import time
-from undetected_chromedriver import By
-from selenium.webdriver.common.keys import Keys
-import undetected_chromedriver as uc
-import logging
-from tqdm import tqdm
-
 from lib.date import DateCalculator, DateAdapter
 
+from undetected_chromedriver import By
+from selenium.webdriver.common.keys import Keys
+
+import undetected_chromedriver as uc
+
+import logging
+import time
+
 class BookingAutomation:
-    def __init__(self):
-        # date coSnvention = 2024-01-17 15:30:00
+    def __init__(self, day:int):
+        
+        # Logging
+        self.logger = logging.getLogger(__name__)
+
+        
+        # date convention = 2024-01-17 15:30:00
         self.date = DateCalculator()
-        self.date = self.date.get_next_tuesday()
+        if day == 1:
+            self.date = self.date.get_next_tuesday()
+        elif day == 3:
+            self.date = self.date.get_next_thursday()
+        else:
+            raise ValueError()
+        
         self.adapter = DateAdapter(self.date)
         self.start_time = self.adapter.start()
         self.finish_time = self.adapter.finish()    
@@ -20,9 +32,7 @@ class BookingAutomation:
         self.HighResolutionMonitor = True
         self.AdjustableHeightDesk = True
 
-        # Set up logging
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
+
         self.bookingInfo = {
             'Desk Location': None,
             'Floor and Address': None
@@ -41,77 +51,98 @@ class BookingAutomation:
         self.driver.maximize_window()
 
     def load_page(self):
-        # Access the booking webpage (sleep=10 to allow it to properly load)
-        self.logger.info('Loading page...')
-        self.driver.get('https://support-places.accenture.com/places')
-        time.sleep(2)
+        try:
+            # Access the booking webpage (sleep=10 to allow it to properly load)
+            self.logger.info('Loading page...')
+            self.driver.get('https://support-places.accenture.com/places')
+            time.sleep(2)
+        except Exception as e:
+            self.logger.error(f'Failed to load page: {e.__class__.__name__}')
 
     def make_reservation(self):
-        # Make a reservation
-        self.logger.info('Making a reservation...')
-        button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/section[1]/div/div[3]/a[1]')
-        button.click()
-        time.sleep(2)
+        try:
+            # Make a reservation
+            self.logger.info('Making a reservation...')
+            button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/section[1]/div/div[3]/a[1]')
+            button.click()
+            time.sleep(4)
+        except Exception as e:
+            self.logger.error(f'Failed to make reservation: {e.__class__.__name__}')
 
     def change_location(self):
-        # Change to Castellana
-        self.logger.info('Changing location to Castellana...')
-        location = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[1]/div/div/div/div[1]/div/a/span[1]')
-        location.click()
-        time.sleep(1)
+        try:
+            # Change to Castellana
+            self.logger.info('Changing location to Castellana...')
+            location = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[1]/div/div/div/div[1]/div/a/span[1]')
+            location.click()
+            time.sleep(1)
+        except Exception as e:
+            self.logger.error(f'Failed to change location: {e.__class__.__name__}')
 
     def type_location(self):
-        # Type in location
-        self.logger.info('Typing in location...')
-        address = 'Madrid, Castellana 85'
-        address_box = self.driver.find_element(By.XPATH, '/html/body/div[6]/div/input')
-        address_box.send_keys(address)
-        time.sleep(1)
-        address_box.send_keys(Keys.ENTER)
-        time.sleep(2)
-
+        try:
+            # Type in location
+            self.logger.info('Typing in location...')
+            address = 'Madrid, Castellana 85'
+            address_box = self.driver.find_element(By.XPATH, '/html/body/div[6]/div/input')
+            address_box.send_keys(address)
+            time.sleep(1)
+            address_box.send_keys(Keys.ENTER)
+            time.sleep(2)
+        except Exception as e:
+            self.logger.error(f'Failed to type location: {e.__class__.__name__}')
 
     def choose_floor(self):
-        # Choose floor
-        time.sleep(1.5)
-        self.logger.info('Choosing floor...')
-        self.floorNumber = '05'
-        floor = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[2]/div/div/a/span[1]')
-        floor.click()
-        time.sleep(1)
+        try:
+            # Choose floor
+            time.sleep(1.5)
+            self.logger.info('Choosing floor...')
+            self.floorNumber = '05'
+            floor = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[2]/div/div/a/span[1]')
+            floor.click()
+            time.sleep(1)
 
-        floor_box = self.driver.find_element(By.XPATH, '/html/body/div[7]/div/input')
-        floor_box.send_keys(self.floorNumber)
-        time.sleep(1.5)
-        floor_box.send_keys(Keys.ENTER)
-        time.sleep(0.2)
-
-    
+            floor_box = self.driver.find_element(By.XPATH, '/html/body/div[7]/div/input')
+            floor_box.send_keys(self.floorNumber)
+            time.sleep(1.5)
+            floor_box.send_keys(Keys.ENTER)
+            time.sleep(1)
+        except Exception as e:
+            self.logger.error(f'Failed to choose floor: {e.__class__.__name__}')
 
     def choose_starting_time(self):
-        # Choose starting date
-        self.logger.info(f'Start time default to {self.start_time} ')
-        start_time_box = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[3]/div[2]/div[1]/input')
-        start_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
-        time.sleep(0.1)
-        start_time_box.send_keys('2024-01-19 00:00:00')
-        time.sleep(0.5)
+        try:
+            # Choose starting date
+            self.logger.info(f'Start time default to {self.start_time} ')
+            start_time_box = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[3]/div[2]/div[1]/input')
+            start_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
+            time.sleep(0.1)
+            start_time_box.send_keys(self.start_time)
+            time.sleep(0.5)
+        except Exception as e:
+            self.logger.error(f'Failed to choose starting time: {e.__class__.__name__}')
 
     def choose_finish_time(self):
-        # Choose finish date
-        self.logger.info(f'Finish time default to {self.finish_time}')
-        finish_time_box = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[4]/div/div[1]/input')
-        finish_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
-        time.sleep(0.1)
-        finish_time_box.send_keys('2024-01-19 01:00:00')  # Insert the finish time
-        time.sleep(0.5)
+        try:
+            # Choose finish date
+            self.logger.info(f'Finish time default to {self.finish_time}')
+            finish_time_box = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[4]/div/div[1]/input')
+            finish_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
+            time.sleep(0.1)
+            finish_time_box.send_keys(self.finish_time)  # Insert the finish time
+            time.sleep(0.5)
+        except Exception as e:
+            self.logger.error(f'Failed to choose finish time: {e.__class__.__name__}')
         
     def init_search(self):
-        self.logger.info('Searching...')
-        time.sleep(0.7)
-        search = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[2]/div/div[2]/div/div/button')
-        search.click()
-        time.sleep(0.5)
+        try:
+            self.logger.info('Searching...')
+            time.sleep(0.7)
+            search = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[2]/div/div[2]/div/div/button')
+            search.click()
+            time.sleep(0.5)
+        except Exception as e:
+            self.logger.error(f'Failed to initialize search: {e.__class__.__name__}')
         
     def filters(self):
         self.logger.info(f'Applying filters\n   - High Resolution monitor: {self.HighResolutionMonitor}\n   - Adjustable Height Desk: {self.AdjustableHeightDesk}')
@@ -146,7 +177,7 @@ class BookingAutomation:
                 
             except Exception as e: # noqa: E722
                 
-                self.logger.warning('Unable to select High Resolution Monitor: Probably not available')
+                self.logger.warning(f'Unable to select High Resolution Monitor: {e.__class__.__name__} ')
             
         if self.AdjustableHeightDesk:
             try:
@@ -184,10 +215,13 @@ class BookingAutomation:
 
             
     def search(self):
-        time.sleep(2)
-        search_button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[2]/div/div[2]/div/div/button')
-        search_button.click()
-        time.sleep(4)
+        try:
+            time.sleep(2)
+            search_button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[2]/div/div[2]/div/div/button')
+            search_button.click()
+            time.sleep(4)
+        except Exception as e:
+            self.logger.error(f'Failed to search: {e.__class__.__name__}')
 
     def book_seat(self):
         
@@ -199,6 +233,7 @@ class BookingAutomation:
         
         # Click to add to the "shopping basket"
         try:
+            time.sleep(2)
             add = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[2]/div/div[1]/iwms-wsd-horizontal-card/div/div[3]/div/button')
             add.click()
             time.sleep(5)
@@ -209,6 +244,8 @@ class BookingAutomation:
             
         # Click to go to booking screen
         try:
+            self.logger.info('Locating booking screen...')
+            time.sleep(3)
             bookButton = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[3]/div/div/div[2]')
             bookButton.click()
             time.sleep(3)
@@ -218,7 +255,9 @@ class BookingAutomation:
         
         # Reservation type
         try:
-            res_type = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div[2]/div/sp-page-row/div/div/span/div/div/section/iwms-wsd-reservation/div/div[1]/div[1]/div[2]/form/div[4]/div/div/div/div/div[1]/a')
+            self.logger.info('Clicking on reservation type...')
+            time.sleep(4)
+            res_type = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div[3]/div/sp-page-row/div/div/span/div/div/section/iwms-wsd-reservation/div/div[1]/div[1]/div[2]/form/div[4]/div/div/div/div/div[1]/a')
             res_type.click()
             time.sleep(1)
             self.logger.info('Reservation type selected')
@@ -227,36 +266,32 @@ class BookingAutomation:
         
         # Choose reservation type: Workspace
         try:
+            self.logger.info('Choosing reservation type...')
             res_type_box = self.driver.find_element(By.XPATH, '/html/body/div[4]/div/input')
             res_type_box.send_keys('Workspace')
             time.sleep(0.3)
             res_type_box.send_keys(Keys.ENTER)
-            time.sleep(0.2)
-            self.logger.info('Workspace reservation type entered')
+            time.sleep(1)
+            self.logger.info('Reservation type entered')
         except Exception as e:
-            self.logger.error(f'Failed to enter Workspace reservation type: {e.__class__.__name__}')
+            self.logger.error(f'Failed to enter reservation type: {e.__class__.__name__}')
         
+        time.sleep(5)
         # Click book
         try:
-            book_button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div[2]/div/sp-page-row/div/div/span/div/div/section/iwms-wsd-reservation/div/div[2]/div/div[1]/div/div[2]/div/button[1]')
+            book_button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div[3]/div/sp-page-row/div/div/span/div/div/section/iwms-wsd-reservation/div/div[2]/div/div[1]/div/div[2]/div/button[1]')
             book_button.click()
             self.logger.info('Book button clicked')
         except Exception as e:
-            self.logger.error(f'Failed to click book button: {e.__class__.__name__}')
-        
-
-
-        
-    
+            self.logger.error(f'Failed to click book button: {e.__class__.__name__}') 
         
         time.sleep(2)  # Wait for the booking to process
        
-       
-    
+          
     def _seat_info(self):
         
         self.logger.info('Saving desk information...')
-        
+        time.sleep(2)
         try:
             time.sleep(2)
             self.bookingInfo['Desk Location'] = self.seat.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[2]/div/div[1]/iwms-wsd-horizontal-card/div/div[2]/div/h4').text
@@ -276,28 +311,9 @@ class BookingAutomation:
         return
          
     
+
     
         
     def delay(self):
-        time.sleep(50000)  # Adding a delay to ensure the page loads before further actions
+        time.sleep(2000)  # Adding a delay to ensure the page loads before further actions
 
-
-if __name__ == "__main__":
-    # Create an instance of the class
-    booking = BookingAutomation()
-
-    # Call the methods in the desired order
-    booking.load_page()
-    
-    for i in tqdm(range(20)):
-        time.sleep(1)
-    booking.make_reservation()
-    booking.change_location()
-    booking.type_location()
-    booking.choose_floor()
-    booking.choose_starting_time()
-    booking.choose_finish_time()
-    booking.search()
-    booking.filters()
-    booking.book_seat() 
-    booking.delay()

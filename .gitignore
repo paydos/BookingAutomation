@@ -1,2 +1,6 @@
 test/
 **/__pycache__/
+venv/
+Pipfile
+*.log
+example.md

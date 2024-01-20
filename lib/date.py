@@ -11,7 +11,7 @@ class DateCalculator:
     
     def get_next_tuesday(self):
         
-        self.logger.info('Calculating date of Thursday in two weeks time')
+        self.logger.info('Calculating date of Tuesday in two weeks time')
 
         
         # Calculate the number of days until the next Tuesday
@@ -23,7 +23,7 @@ class DateCalculator:
         # Get the date of the Tuesday of the week after next
         two_weeks_tuesday : datetime = datetime.now() + timedelta(days=total_days_tuesday)
         
-        self.logger.info(f'Date selected for Thursday: {two_weeks_tuesday}')
+        self.logger.info(f'Date selected for Tuesday: {two_weeks_tuesday}')
 
         return two_weeks_tuesday.replace(microsecond=0)
 
@@ -42,7 +42,7 @@ class DateCalculator:
         
         self.logger.info(f'Date selected for Thursday: {two_weeks_thursday}')
 
-        return two_weeks_thursday.replace(hour=9, minute=0, second=0, microsecond=0)
+        return two_weeks_thursday.replace(microsecond=0)
 
 
 class DateAdapter:
@@ -54,10 +54,10 @@ class DateAdapter:
         pass
     
     
-    def finish(self, custom_end : datetime = None):
-        if custom_end:
-            return self.date.replace(hour=17, minute=0, second=0, microsecond=0) + custom_end
-            pass
-            
-        else:
-            return self.date.replace(hour=17, minute=0, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:%S')
+    def finish(self):
+        return self.date.replace(hour=17, minute=30, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:%S')
+
+
+
+
+today = datetime.now().weekday()
