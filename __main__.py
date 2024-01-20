@@ -1,16 +1,10 @@
 import logging
 
 from lib.booking import BookingAutomation
-from lib.setup import AutoInstaller
+from lib.setup import AutoInstaller  # noqa: F401
 from lib.date import today
 from lib.cron import cron
 
-
-def setup():
-    installer = AutoInstaller('requirements.txt')
-    installer.install()
-    
-setup()
 
 def job():
     try:

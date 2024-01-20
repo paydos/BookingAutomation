@@ -16,3 +16,5 @@ class AutoInstaller:
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', '-r', self.requirements_file])
         self.logger.info('Installation/check completed successfully.')
         
+installer = AutoInstaller('requirements.txt')
+installer.install()
