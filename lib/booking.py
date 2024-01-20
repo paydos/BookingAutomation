@@ -9,20 +9,24 @@ from lib.date import DateCalculator, DateAdapter
 
 class BookingAutomation:
     def __init__(self):
-        # date convention = 2024-01-17 15:30:00
-        self.date = DateCalculator.get_next_tuesday()
+        # date coSnvention = 2024-01-17 15:30:00
+        self.date = DateCalculator()
+        self.date = self.date.get_next_tuesday()
         self.adapter = DateAdapter(self.date)
         self.start_time = self.adapter.start()
         self.finish_time = self.adapter.finish()    
         
         # Custom Parameters
         self.HighResolutionMonitor = True
-        self.AdjustableHeightDesk = False
+        self.AdjustableHeightDesk = True
 
         # Set up logging
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
-        self.bookingInfo = {}
+        self.bookingInfo = {
+            'Desk Location': None,
+            'Floor and Address': None
+        }
 
         # Set up chrome profile (Use Default)
         self.logger.info('Creating Google Chrome Driver')
@@ -64,10 +68,12 @@ class BookingAutomation:
         address_box.send_keys(address)
         time.sleep(1)
         address_box.send_keys(Keys.ENTER)
+        time.sleep(2)
 
 
     def choose_floor(self):
         # Choose floor
+        time.sleep(1.5)
         self.logger.info('Choosing floor...')
         self.floorNumber = '05'
         floor = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[2]/div/div/a/span[1]')
@@ -76,7 +82,7 @@ class BookingAutomation:
 
         floor_box = self.driver.find_element(By.XPATH, '/html/body/div[7]/div/input')
         floor_box.send_keys(self.floorNumber)
-        time.sleep(0.5)
+        time.sleep(1.5)
         floor_box.send_keys(Keys.ENTER)
         time.sleep(0.2)
 
@@ -102,79 +108,144 @@ class BookingAutomation:
         
     def init_search(self):
         self.logger.info('Searching...')
-        time.sleep(0.1)
+        time.sleep(0.7)
         search = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[2]/div/div[2]/div/div/button')
         search.click()
         time.sleep(0.5)
         
     def filters(self):
-        self.logger.info(f'Applying filters\n   - High Resolution monitor: {self.HighResolutionMonitor}\n  \
-            - Adjustable Height Desk:{self.AdjustableHeightDesk}')
+        self.logger.info(f'Applying filters\n   - High Resolution monitor: {self.HighResolutionMonitor}\n   - Adjustable Height Desk: {self.AdjustableHeightDesk}')
         
+        # Check if High Resolution Monitor is selected
         if self.HighResolutionMonitor:
             try:
-                time.sleep(0.1)
+                time.sleep(4)
                 self.logger.info('Selecting High Resolution Monitor')
-                monitor = self.driver.find_element(By.XPATH, '//*[@id="chk13b0c35f879269d03cc2ca64dabb350d"]')
-                monitor.click()
-                time.sleep(0.1)
-                self.logger.info('High Resolution Montitor selected')
+                
+                # Find the monitor element
+                monitor = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[1]/iwms-wsd-reservable-filter/div/div[4]/ul/li[2]/div/label')
+                
+                # Check if the monitor text matches 'High Resolution Monitor'
+                if monitor.text == 'High Resolution Monitor':
+                    # Click the monitor element
+                    monitor.click()
+                    time.sleep(1)
+                    self.logger.info('High Resolution Monitor selected')
+                    
+                # Check if the monitor text matches 'Adjustable Height Desk' in case order is inverted. Check if option is chosen.
+                elif monitor.text == 'Adjustable Height Desk' and self.AdjustableHeightDesk:
+                    
+                    monitor.click()
+                    time.sleep(1)
+                    
+                    self.logger.info('Adjustable Height Desk selected')
+                    
+                else:
+                    # Log an error if the selected element does not correspond to High Resolution Monitor nor Adjustable Height Desk
+                    self.logger.error('The selected element does not correspond to High Resolution Monitor')
                 
             except Exception as e: # noqa: E722
                 
-                self.logger.error('Unable to select High Resolution Monitor: Probably not available')
+                self.logger.warning('Unable to select High Resolution Monitor: Probably not available')
             
         if self.AdjustableHeightDesk:
             try:
+                time.sleep(4)
                 self.logger.info('Selecting Adjustable Height Desk')
                 time.sleep(1)
-                desk = self.driver.find_element(By.XPATH, '//*[@id="chka690c35f879269d03cc2ca64dabb3504"]')
-                desk.click()
-                time.sleep(0.1)
-                self.logger.info('Adjustable Height Desk selected')
+                desk = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[1]/iwms-wsd-reservable-filter/div/div[4]/ul/li[1]/div/label')
+                if desk.text == 'Adjustable Height Desk':
+                    desk.click()
+                    time.sleep(1)
+                    self.logger.info('Adjustable Height Desk selected')
+                elif desk.text == 'High Resolution Monitor' and self.HighResolutionMonitor:
+                    desk.click()
+                    time.sleep(1)
+                    self.logger.info('High Resolution Monitor selected')
+                else:
+                    self.logger.warning('The selected element does not correspond to Adjustable Height Desk nor High Resolution Monitor')
                 
             except:  # noqa: E722
                 
                 self.logger.error('Unable to select Adjustable Height Desk: Probably not available')
-                
-        time.sleep(0.1)
+        time.sleep(1)
         
+        self.logger.info('Applying filters...')
         try:
-            self.logger.info('Applying filters...')
+            
             applyFilters = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[1]/iwms-wsd-reservable-filter/div/div[4]/a')
             applyFilters.click()
+            time.sleep(0.1)
+            self.logger.info('Filters applied')
+            
         except Exception as e:  # noqa: E722
             self.logger.error(f'Unable to apply filters: {e.__class__.__name__}')
         
 
             
     def search(self):
+        time.sleep(2)
         search_button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[2]/div/div[2]/div/div/button')
         search_button.click()
-        time.sleep(2)
+        time.sleep(4)
 
     def book_seat(self):
-        # Find all available seats
-        self.logger.info('Finding available seats...')
+        
+        self._seat_info()
+        print("Desk Location: ", self.bookingInfo['Desk Location'])
+        print("Floor and Address: ", self.bookingInfo['Floor and Address'])
+        
+        time.sleep(2)
+        
+        # Click to add to the "shopping basket"
         try:
-            seats = self.driver.find_element(By.CLASS_NAME, 'horizontal-card__container')
-            # Check if there is at least one seat
-            if seats:
-                # Find the "Add" button of the first seat
-                add_button = seats[0].find_element(By.CLASS_NAME, 'btn-add-card')
-                # Click the "Add" button
-                add_button.click()
-                time.sleep(2)
-            else:
-                self.logger.info('No available seats found.')
+            add = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[2]/div/div[1]/iwms-wsd-horizontal-card/div/div[3]/div/button')
+            add.click()
+            time.sleep(5)
+            self.logger.info('Added to shopping basket')
         except Exception as e:
-            self.logger.error(f'Error booking seat: {e}')
+            self.logger.error(f'Failed to add to shopping basket: {e.__class__.__name__}')
+            
+            
+        # Click to go to booking screen
+        try:
+            bookButton = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[3]/div/div/div[2]')
+            bookButton.click()
+            time.sleep(3)
+            self.logger.info('Navigated to booking screen')
+        except Exception as e:
+            self.logger.error(f'Failed to navigate to booking screen: {e.__class__.__name__}')
+        
+        # Reservation type
+        try:
+            res_type = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div[2]/div/sp-page-row/div/div/span/div/div/section/iwms-wsd-reservation/div/div[1]/div[1]/div[2]/form/div[4]/div/div/div/div/div[1]/a')
+            res_type.click()
+            time.sleep(1)
+            self.logger.info('Reservation type selected')
+        except Exception as e:
+            self.logger.error(f'Failed to select reservation type: {e.__class__.__name__}')
+        
+        # Choose reservation type: Workspace
+        try:
+            res_type_box = self.driver.find_element(By.XPATH, '/html/body/div[4]/div/input')
+            res_type_box.send_keys('Workspace')
+            time.sleep(0.3)
+            res_type_box.send_keys(Keys.ENTER)
+            time.sleep(0.2)
+            self.logger.info('Workspace reservation type entered')
+        except Exception as e:
+            self.logger.error(f'Failed to enter Workspace reservation type: {e.__class__.__name__}')
+        
+        # Click book
+        try:
+            book_button = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div[2]/div/sp-page-row/div/div/span/div/div/section/iwms-wsd-reservation/div/div[2]/div/div[1]/div/div[2]/div/button[1]')
+            book_button.click()
+            self.logger.info('Book button clicked')
+        except Exception as e:
+            self.logger.error(f'Failed to click book button: {e.__class__.__name__}')
+        
 
-        # Otherwise, book the first available seat
-        self.logger.info('Booking the first available seat...')
-        self.seat = seats
-        book_button = self.seat.find_element(By.CLASS_NAME, 'btn btn-default horizontal-card__action-button form-control text-md text-overflow-ellipsis btn-add-card card-btn-secondary')
-        book_button.click()
+
         
     
         
@@ -183,9 +254,25 @@ class BookingAutomation:
        
     
     def _seat_info(self):
-                
-        self.bookingInfo['Desk Location'] = self.seat.find_element(By.CLASS_NAME, 'horizontal-card__title horizontal-card__truncate-in-two-lines text-md ng-binding ng-scope').text
-        self.bookingInfo['Floor and Address'] = self.seat.find_element(By.CLASS_NAME, 'horizontal-card__subtitle text-muted text-overflow-ellipsis ng-binding ng-scope').text
+        
+        self.logger.info('Saving desk information...')
+        
+        try:
+            time.sleep(2)
+            self.bookingInfo['Desk Location'] = self.seat.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[2]/div/div[1]/iwms-wsd-horizontal-card/div/div[2]/div/h4').text
+            self.logger.info(f'Desk location: {self.bookingInfo["Desk Location"]}')
+            
+        except Exception as e:
+            self.logger.error(f'Unable to fetch Desk Location: {e.__class__.__name__}')   
+        
+        try:
+            time.sleep(2)
+            self.bookingInfo['Floor and Address'] = self.seat.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[2]/div[2]/div[2]/div/div[1]/iwms-wsd-horizontal-card/div/div[2]/div/div[1]').text
+            self.logger.info(f'Floor and Address: {self.bookingInfo["Floor and Address"]}')
+            
+        except Exception as e:
+            self.logger.error(f'Unable to fetch Floor and Address: {e.__class__.__name__}')         
+        
         return
          
     
@@ -212,6 +299,5 @@ if __name__ == "__main__":
     booking.choose_finish_time()
     booking.search()
     booking.filters()
-
-    booking.book_seat()
+    booking.book_seat() 
     booking.delay()

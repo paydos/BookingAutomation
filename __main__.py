@@ -1,10 +1,15 @@
 from lib.booking import BookingAutomation
+from tqdm import tqdm
+import time
 
 def main():
     booking = BookingAutomation()
 
     # Call the methods in the desired order
     booking.load_page()
+    
+    for i in tqdm(range(20)):
+        time.sleep(1)
     
     # Make a reservation
     booking.make_reservation()
@@ -23,7 +28,7 @@ def main():
     
     # Choose the finish time
     booking.choose_finish_time()
-    
+
     # Search for available slots
     booking.search()
     
