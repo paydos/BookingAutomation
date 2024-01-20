@@ -41,6 +41,9 @@ def job():
         
         # Introduce a delay
         booking.delay()
+        
+        # Close driver to avoid RAM garbage
+        booking.close()
 
     except:   # noqa: E722
         logging.exception("Today's not Tuesday or Thursday. Going back to Cron mode.")

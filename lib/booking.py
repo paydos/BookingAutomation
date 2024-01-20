@@ -6,6 +6,7 @@ from selenium.webdriver.common.keys import Keys
 import undetected_chromedriver as uc
 
 import logging
+import os
 import time
 
 class BookingAutomation:
@@ -43,8 +44,16 @@ class BookingAutomation:
         options = uc.ChromeOptions()
         options.add_argument("--verbose")
         options.add_argument("--headless")
-        options.add_argument("--user-data-dir=/home/ruiz/.config/google-chrome/") # Change the path according to your system
-        options.add_argument("--profile-directory=Profile 1") # Change to Profile 1 for testing 
+        
+        # For Linux - testing
+        #options.add_argument("--user-data-dir=/home/$USER/.config/google-chrome/") # Change the path according to your system
+        #options.add_argument("--profile-directory=Profile 1") # Change to Profile 1 for testing 
+        
+        # For Windows
+                
+        user_data_dir = os.path.expanduser('~\\AppData\\Local\\Google\\Chrome\\User Data')
+        options.add_argument(f"--user-data-dir={user_data_dir}")  # Path updated to use the current Windows user's profile
+        options.add_argument("--profile-directory=Default")  # Change to Profile 1 for testing
         self.driver = uc.Chrome(options=options)
 
         # Maximize the window
@@ -311,6 +320,10 @@ class BookingAutomation:
         
         return
          
+    def close(self):
+        time.sleep(20)
+        self.driver.close()
+        self.logger.info('Webdriver shut down. The service is now passive.')
     
 
     
