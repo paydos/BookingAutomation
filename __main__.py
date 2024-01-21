@@ -53,7 +53,7 @@ def job():
 
     
 def main():
-    logging.basicConfig(force=True, filename='BookingAutomation.log', level=logging.DEBUG, format='%(asctime)s [%(levelname)s] %(message)s')
+    logging.basicConfig(force=True, filename='BookingAutomation.log', level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
     logging.info('Booking automation service initialised.')
     cron(job=job)
 
