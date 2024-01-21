@@ -10,6 +10,7 @@
 
   <p align="center">
     An automated solution to book your place at Accenture.
+    Created by Daniel Ruiz Blanco (Data Scientist intern)
     <br />
     <a href="https://github.com/paydos/BookingAutomation"><strong>Explore the docs »</strong></a>
     <br />
