@@ -24,8 +24,7 @@ class AutoInstaller:
 
     def install(self):
         self.logger.info('Starting module installation/check process...')
-        requirements_path = os.path.join(self.file_path, self.requirements_file)
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', '-r', requirements_path])
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', '-r', self.requirements_file])
         self.logger.info('Installation/check completed successfully.')
         
 
