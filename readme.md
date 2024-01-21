@@ -1,10 +1,9 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/paydos/BookingAutomation">
-    <img src="image.jpg" alt="Logo" width="80" height="80">
+    <img src="images/image.jpg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Accenture Places Booking Automation</h3>
@@ -133,7 +132,7 @@ _For more examples, please refer to the [Documentation](https://github.com/paydo
 <!-- ROADMAP -->
 ## Roadmap
 - [] Automatic check-in
- 
+
 See the [open issues](https://github.com/paydos/BookingAutomation/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
