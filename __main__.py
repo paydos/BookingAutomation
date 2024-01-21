@@ -39,9 +39,6 @@ def job():
         # Book the seat
         booking.book_seat()
         
-        # Introduce a delay
-        booking.delay()
-        
         # Close driver to avoid RAM garbage
         booking.close()
 

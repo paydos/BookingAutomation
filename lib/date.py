@@ -55,7 +55,8 @@ class DateAdapter:
     
     
     def finish(self):
-        return self.date.replace(hour=17, minute=30, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:%S')
+        date_str = self.date.strftime('%Y-%m-%d')
+        return f"{date_str} 17:00:00"
 
 
 
