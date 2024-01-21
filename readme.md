@@ -1,5 +1,28 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/paydos/BookingAutomation">
+    <img src="image.jpg" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Accenture Places Booking Automation</h3>
+
+  <p align="center">
+    An automated solution to book your place at Accenture.
+    <br />
+    <a href="https://github.com/paydos/BookingAutomation"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/paydos/BookingAutomation">View Demo</a>
+    ·
+    <a href="https://github.com/paydos/BookingAutomation/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/paydos/BookingAutomation/issues">Request Feature</a>
+  </p>
+</div>
+<br />
 
 # Accenture Places Booking Automation
 
@@ -83,9 +106,9 @@ To get a local copy up and running follow these simple steps.
    git clone git@github.com:paydos/BookingAutomation.git
    ```
 
-2. Install the required Python packages:
+2. Run the installer:
    ```sh
-   pip install -r requirements.txt
+   python install.sh
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -93,15 +116,15 @@ To get a local copy up and running follow these simple steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-These scripts are designed to be run on Windows. To run them as a background process (daemon) whenever the computer starts, you can create a Windows service. Here is an example of how to do this:
+To simplify the setup process on Windows, you don't need to manually create a service. Instead, you can run the `installer.py` script which automates the installation and setup of the necessary services and dependencies. Here's how to use it:
 
-1. Open the Windows Command Prompt as an administrator.
-2. Use the `sc` command to create a new service that will start the Python script at boot. Replace `path_to_python` and `path_to_script` with the paths to your Python executable and the `__main__.py` script respectively:
-   ```sh
-   sc create BookingAutomation binPath= "path_to_python path_to_script" start= auto
-   ```
+1. Run the `installer.py` script by double-clicking on it or executing it from the command line. This script will:
+   - Install all the required Python packages listed in `requirements.txt`.
+   - Set up the BookingAutomation service to run the `__main__.py` script at system startup.
 
-Please note that the script will not run if you manually start your computer. The service will start the script only when the system boots up.
+2. After the `installer.py` script has finished running, simply reboot your computer. Upon startup, the BookingAutomation service will automatically run in the background without any further action required from you.
+
+This approach eliminates the need for manual configuration and ensures that all necessary components are correctly installed and configured.
 
 _For more examples, please refer to the [Documentation](https://github.com/paydos/BookingAutomation)_
 
@@ -109,7 +132,8 @@ _For more examples, please refer to the [Documentation](https://github.com/paydo
 
 <!-- ROADMAP -->
 ## Roadmap
-
+- [] Automatic check-in
+ 
 See the [open issues](https://github.com/paydos/BookingAutomation/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
