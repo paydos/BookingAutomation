@@ -171,7 +171,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 If you have any questions or suggestions, feel free to reach out to me:
 
-- Instagram: [@ruizblancoo](https://www.instagram.com/ruizblancoo)
 - Email: [darru2002@gmail.com](mailto:darru2002@gmail.com)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
