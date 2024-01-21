@@ -65,7 +65,7 @@ class BookingAutomation:
             # Access the booking webpage (sleep=10 to allow it to properly load)
             self.logger.info('Loading page...')
             self.driver.get('https://support-places.accenture.com/places')
-            time.sleep(2)
+            time.sleep(8)
         except Exception as e:
             self.logger.error(f'Failed to load page: {e.__class__.__name__}')
 
@@ -85,7 +85,7 @@ class BookingAutomation:
             self.logger.info('Changing location to Castellana...')
             location = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[1]/div/div/div/div[1]/div/a/span[1]')
             location.click()
-            time.sleep(1)
+            time.sleep(2)
         except Exception as e:
             self.logger.error(f'Failed to change location: {e.__class__.__name__}')
 
