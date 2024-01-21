@@ -135,9 +135,12 @@ _For more examples, please refer to the [Documentation](https://github.com/paydo
 
 <!-- ROADMAP -->
 ## Roadmap
-- [ ] Automatic check-in
-- [ ] Improve cron tasking (If user does not have the computer on by 9am it won't be able to book a seat)
-- [ ] Send notification via GUI to user about the booked seat (Right now you have to look it up yourself in your reservations)
+ - [ ] Implement automated check-in feature.
+ - [ ] Enhance scheduling system to handle scenarios where the user's computer is not active by the designated time.
+ - [ ] Develop a user notification system within the GUI to inform about successful seat reservations.
+ - [ ] Extend the seat selection algorithm to include multiple floors, improving the chances of finding an available seat.
+ - [ ] Introduce user-configurable settings during installation to set preferred location, floor, and booking time.
+ - [ ] Address the issue where the automated driver update process stalls if Chrome is already running.
 
 See the [open issues](https://github.com/paydos/BookingAutomation/issues) for a full list of proposed features (and known issues).
 
