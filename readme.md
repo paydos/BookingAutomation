@@ -10,7 +10,6 @@
 
   <p align="center">
     An automated solution to book your place at Accenture.
-    Created by Daniel Ruiz Blanco (Data Scientist intern)
     <br />
     <a href="https://github.com/paydos/BookingAutomation"><strong>Explore the docs »</strong></a>
     <br />
@@ -26,7 +25,13 @@
 
 # Accenture Places Booking Automation
 
-Welcome to the Accenture Places Booking Automation project. This project is designed to automate the process of booking a place at Accenture. It is composed of several Python scripts that work together to navigate the booking website, select the desired parameters, and complete the booking process.
+Hello! I'm Daniel Ruiz Blanco, a data scientist intern at Accenture and the creator of the Accenture Places Booking Automation project. I embarked on this journey to simplify the process of booking a place at Accenture, which I found to be quite lengthy and often resulted in missing out on bookings due to high demand.
+
+This project is a collection of Python scripts that work in harmony to complete the booking process. It's my solution to a problem many of us face, and I hope it will be as helpful to my colleagues as it has been to me.
+
+I'm planning to expand this project to support worldwide locations. While this feature is not yet implemented, I plan to finish it in my free time.
+
+Thank you for your interest in this project. I'm looking forward to hearing your feedback and suggestions.
 
 <!-- PROJECT SHIELDS -->
 [![Contributors][contributors-shield]][contributors-url]
