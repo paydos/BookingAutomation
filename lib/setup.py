@@ -26,8 +26,8 @@ class AutoInstaller:
     def add_to_startup(self):
         try:
             if self.file_path == "":
-                self.file_path = os.path.dirname(os.path.realpath(__file__))
-                print(self.file_path)
+                self.file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), '__main__.py')
+                
             bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % self.USER_NAME
             self.logger.info('Adding BookingAutomation to run on startup')
             with open(bat_path + '\\' + "BookingAutomation.bat", "w+") as bat_file:

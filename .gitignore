@@ -4,3 +4,4 @@ venv/
 Pipfile
 *.log
 example.md
+*.bat
