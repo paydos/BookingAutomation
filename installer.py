@@ -6,6 +6,9 @@ import os
 
 
 
+# Configure logging
+logging.basicConfig(filename=install_log_path, level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
+
 
 if not os.path.exists(log_folder):
     os.makedirs(log_folder)
@@ -20,9 +23,6 @@ else:
     logging.info('Scripts folder already exists at {}'.format(scripts_folder))
 
 
-
-# Configure logging
-logging.basicConfig(filename=install_log_path, level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 
 # Create an instance of the AutoInstaller class
 installer = AutoInstaller()
