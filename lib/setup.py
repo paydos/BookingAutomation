@@ -36,6 +36,3 @@ class AutoInstaller:
         except Exception as e:
             self.logger.error('Failed to add script to startup: ' + str(e.__class__.__name__))
         
-installer = AutoInstaller('requirements.txt')
-installer.install()
-installer.add_to_startup()

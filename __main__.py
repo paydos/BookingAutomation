@@ -55,6 +55,11 @@ def job():
 def main():
     logging.basicConfig(force=True, filename='BookingAutomation.log', level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
     logging.info('Booking automation service initialised.')
+    
+    installer = AutoInstaller('requirements.txt')
+    installer.install()
+    installer.add_to_startup()
+    
     cron(job=job)
 
 
