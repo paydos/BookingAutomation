@@ -76,6 +76,10 @@ The project is composed of several Python scripts:
 
 - `setup.py`: This script is responsible for setting up the environment by installing the necessary Python packages.
 
+- `installer.py`: This script utilizes the `AutoInstaller` class from the `lib.setup` module to automate the installation of required modules and adds the application to the system startup.
+
+- `paths.py`: This script defines the file paths used throughout the project, such as the log file path and the requirements file path.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -131,7 +135,9 @@ _For more examples, please refer to the [Documentation](https://github.com/paydo
 
 <!-- ROADMAP -->
 ## Roadmap
-- [] Automatic check-in
+- [ ] Automatic check-in
+- [ ] Improve cron tasking (If user does not have the computer on by 9am it won't be able to book a seat)
+- [ ] Send notification via GUI to user about the booked seat (Right now you have to look it up yourself in your reservations)
 
 See the [open issues](https://github.com/paydos/BookingAutomation/issues) for a full list of proposed features (and known issues).
 
