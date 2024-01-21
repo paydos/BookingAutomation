@@ -1,7 +1,6 @@
 import logging
 
 from lib.booking import BookingAutomation
-from lib.setup import AutoInstaller  # noqa: F401
 from lib.date import today
 from lib.paths import log_file_path
 from lib.cron import cron
@@ -56,11 +55,7 @@ def job():
 def main():
     logging.basicConfig(force=True, filename=log_file_path, level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
     logging.info('Booking automation service initialised.')
-    
-    installer = AutoInstaller('requirements.txt')
-    installer.install()
-    installer.add_to_startup()
-    
+       
     cron(job=job)
 
 

@@ -11,7 +11,7 @@ from lib.paths import requirements_file_path
 
 
 class AutoInstaller:
-    def __init__(self, requirements_file):
+    def __init__(self):
         self.requirements_file = requirements_file_path
         self.logger = logging.getLogger(__name__)
         
