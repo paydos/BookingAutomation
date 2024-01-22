@@ -147,6 +147,7 @@ _For more examples, please refer to the [Documentation](https://github.com/paydo
  - [ ] Extend the seat selection algorithm to include multiple floors, improving the chances of finding an available seat.
  - [ ] Introduce user-configurable settings during installation to set preferred location, floor, and booking time.
  - [ ] Address the issue where the automated driver update process stalls if Chrome is already running.
+ - [ ] Update logging (Log file generates too much data)
 
 See the [open issues](https://github.com/paydos/BookingAutomation/issues) for a full list of proposed features (and known issues).
 
