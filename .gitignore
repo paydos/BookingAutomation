@@ -4,3 +4,4 @@ venv/
 Pipfile
 example.md
 *.bat
+parameters
