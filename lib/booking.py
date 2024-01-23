@@ -2,6 +2,7 @@ from lib.date import DateCalculator, DateAdapter
 
 from undetected_chromedriver import By
 from selenium.webdriver.common.keys import Keys
+from parameters.params import location, floor, monitor, heightdesk
 
 import undetected_chromedriver as uc
 
@@ -30,8 +31,10 @@ class BookingAutomation:
         self.finish_time = self.adapter.finish()    
         
         # Custom Parameters
-        self.HighResolutionMonitor = True
-        self.AdjustableHeightDesk = True
+        self.HighResolutionMonitor = monitor
+        self.AdjustableHeightDesk = heightdesk
+        self.location = location
+        self.floor = floor
 
 
         self.bookingInfo = {
@@ -82,7 +85,7 @@ class BookingAutomation:
     def change_location(self):
         try:
             # Change to Castellana
-            self.logger.info('Changing location to Castellana...')
+            self.logger.info(f'Changing location to {self.location}...')
             location = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[1]/div/div/div/div[1]/div/a/span[1]')
             location.click()
             time.sleep(2)
@@ -93,7 +96,7 @@ class BookingAutomation:
         try:
             # Type in location
             self.logger.info('Typing in location...')
-            address = 'Madrid, Castellana 85'
+            address = self.location
             address_box = self.driver.find_element(By.XPATH, '/html/body/div[6]/div/input')
             address_box.send_keys(address)
             time.sleep(1)
@@ -106,8 +109,8 @@ class BookingAutomation:
         try:
             # Choose floor
             time.sleep(1.5)
-            self.logger.info('Choosing floor...')
-            self.floorNumber = '05'
+            self.logger.info(f'Choosing floor {self.floor}...')
+            self.floorNumber = self.floor
             floor = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[2]/div/div/a/span[1]')
             floor.click()
             time.sleep(1)
