@@ -23,13 +23,15 @@
 </div>
 <br />
 
-# Accenture Places Booking Automation
+## Accenture Places Booking Automation
 
 Hello! I'm Daniel Ruiz Blanco, a data scientist intern at Accenture and the creator of the Accenture Places Booking Automation project. I embarked on this journey to simplify the process of booking a place at Accenture, which I found to be quite lengthy and often resulted in missing out on bookings due to high demand.
 
+While commuting to and from the office, I found myself with some spare time. As a developer who enjoys problem-solving, I decided to utilise this time to code a solution that could assist others.
+
 This project is a collection of Python scripts that work in harmony to complete the booking process. It's my solution to a problem many of us face, and I hope it will be as helpful to my colleagues as it has been to me.
 
-I'm planning to expand this project to support worldwide locations. While this feature is not yet implemented, I plan to finish it in my free time.
+I'm pleased to announce that this project now supports worldwide locations. This feature has been implemented and is ready for use.
 
 Thank you for your interest in this project. I'm looking forward to hearing your feedback and suggestions.
 
@@ -72,19 +74,15 @@ Thank you for your interest in this project. I'm looking forward to hearing your
 
 The project is composed of several Python scripts:
 
-- `__main__.py`: This is the main script that orchestrates the entire booking process. It initializes the booking automation, loads the booking page, makes a reservation, changes the location, types in the location, chooses the floor, chooses the starting and finishing time, searches for available slots, applies filters, and finally books the seat.
+- `__main__.py` script is the main driver of the application. It initializes the booking automation process, loads the booking page, makes a reservation, changes the location, types in the location, chooses the floor, chooses the starting and finishing time, searches for available slots, applies filters, and finally books the seat. It uses the `BookingAutomation` class from the `lib/booking.py` module to perform these tasks.
+- The `BookingAutomation` class uses the Selenium WebDriver to interact with the booking website. It also uses the `DateCalculator` and `DateAdapter` classes from the `lib/date.py` module to calculate and format the dates used in the booking process.
+- The `cron.py` script in the lib directory is responsible for scheduling the execution of the booking process. It uses the `schedule` library to run the booking process at specific times.
 
-- `cron.py`: This script is responsible for scheduling the execution of the booking process. It uses the `schedule` library to run the booking process at specific times.
+- The `setup.py` script in the lib directory is responsible for setting up the environment by installing the necessary Python packages. It uses the `AutoInstaller` class to automate this process.
 
-- `booking.py`: This script contains the `BookingAutomation` class which encapsulates all the steps involved in the booking process. It uses the Selenium WebDriver to interact with the booking website.
+- The `installer.py` script utilizes the `AutoInstaller` class from the `lib/setup.py` module to automate the installation of required modules and adds the application to the system startup. It accepts two required arguments: `--location` and `--floor`, which are used to specify the location for the booking and the preferred floor number.
 
-- `date.py`: This script contains the `DateCalculator` and `DateAdapter` classes which are used to calculate and format the dates used in the booking process.
-
-- `setup.py`: This script is responsible for setting up the environment by installing the necessary Python packages.
-
-- `installer.py`: This script utilizes the `AutoInstaller` class from the `lib.setup` module to automate the installation of required modules and adds the application to the system startup.
-
-- `paths.py`: This script defines the file paths used throughout the project, such as the log file path and the requirements file path.
+- The `paths.py` script in the lib directory defines the file paths used throughout the project, such as the log file path and the requirements file path.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -104,9 +102,9 @@ For this project I used Python and Selenium Webdriver and its patched version un
 
 To get a local copy up and running follow these simple steps.
 
-### Installation
+### Download
 
-1. Clone the repo using HTTPS:
+1. Download the repository using HTTPS:
    ```sh
    git clone https://github.com/paydos/BookingAutomation.git
    ```
@@ -115,21 +113,41 @@ To get a local copy up and running follow these simple steps.
    git clone git@github.com:paydos/BookingAutomation.git
    ```
 
-2. Run the installer:
-   ```sh
-   python installer.py
-   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-To simplify the setup process on Windows, you don't need to manually create a service. Instead, you can run the `installer.py` script which automates the installation and setup of the necessary services and dependencies. Here's how to use it:
+The `installer.py` script simplifies the setup process by automating the installation and setup of necessary services and dependencies. Here's how to use it:
 
-1. Run the `installer.py` script by double-clicking on it or executing it from the command line. This script will:
-   - Install all the required Python packages listed in `requirements.txt`.
-   - Set up the BookingAutomation service to run the `__main__.py` script at system startup.
+1. Run the `installer.py` script with the required `--location` and `--floor` arguments. Additional optional arguments include `--heightdesk` and `--monitor` for booking preferences, `--remove` to uninstall the service, `--reinstall` to reinstall the application, and `--upgrade` to upgrade the application to the latest version. This script performs the following tasks:
+   - Installs necessary Python packages from `requirements.txt`.
+   - Sets up the BookingAutomation service to run at startup.
+   - Configures booking location and floor parameters.
+   - Reinstalls the application if `--reinstall` is set to True. This will remove the current installation and install it again, ensuring you have a clean setup.
+   - Upgrades the application to the latest version if `--upgrade` is set to True. This will fetch the latest version from the repository and replace your current version with it.
+
+To run the installer with custom location and floor:
+   ```sh
+   python installer.py --location "Your Location" --floor YourFloorNumber
+   ```
+   
+To run the installer with custom location, floor, and optional parameters:
+   ```sh
+   python installer.py --location "Your Location" --floor YourFloorNumber --heightdesk True --monitor True
+   ```
+
+To reinstall the application with a new location and floor (useful for changing locations or fixing bugs). You can also include optional parameters:
+   ```sh
+   python installer.py --location "New Location" --floor NewFloorNumber --heightdesk True --monitor True --reinstall True
+   ```
+
+
+To only upgrade the application:
+   ```sh
+   python installer.py --upgrade True
+   ```
 
 2. After the `installer.py` script has finished running, simply reboot your computer. Upon startup, the BookingAutomation service will automatically run in the background without any further action required from you.
 
@@ -137,17 +155,21 @@ This approach eliminates the need for manual configuration and ensures that all 
 
 _For more examples, please refer to the [Documentation](https://github.com/paydos/BookingAutomation)_
 
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
  - [ ] Implement automated check-in feature.
  - [ ] Enhance scheduling system to handle scenarios where the user's computer is not active by the designated time.
- - [ ] Develop a user notification system within the GUI to inform about successful seat reservations.
+ - [ ] Develop a user notification system within the GUI to inform about successful seat reservations (or another way of notifying the user about the booked place).
  - [ ] Extend the seat selection algorithm to include multiple floors, improving the chances of finding an available seat.
- - [ ] Introduce user-configurable settings during installation to set preferred location, floor, and booking time.
+ - [X] Introduce user-configurable settings during installation to set preferred location and floor.
  - [ ] Address the issue where the automated driver update process stalls if Chrome is already running.
-
+ - [X] Update logging (Log file generates too much data)
+ - [X] Add reinstaller
+ - [X] Add automatic upgrader
+ 
 See the [open issues](https://github.com/paydos/BookingAutomation/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
