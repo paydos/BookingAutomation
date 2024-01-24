@@ -76,13 +76,13 @@ The project is composed of several Python scripts:
 
 - `__main__.py` script is the main driver of the application. It initializes the booking automation process, loads the booking page, makes a reservation, changes the location, types in the location, chooses the floor, chooses the starting and finishing time, searches for available slots, applies filters, and finally books the seat. It uses the `BookingAutomation` class from the `lib/booking.py` module to perform these tasks.
 - The `BookingAutomation` class uses the Selenium WebDriver to interact with the booking website. It also uses the `DateCalculator` and `DateAdapter` classes from the `lib/date.py` module to calculate and format the dates used in the booking process.
-- The `cron.py` script in the lib directory is responsible for scheduling the execution of the booking process. It uses the `schedule` library to run the booking process at specific times.
+- The `cron.py` script in the lib directory is responsible for scheduling the execution of the booking process. It uses the `schedule` library to run the booking process at specific times. It also logs the execution of the scheduled tasks and checks for scheduled tasks every minute.
 
-- The `setup.py` script in the lib directory is responsible for setting up the environment by installing the necessary Python packages. It uses the `AutoInstaller` class to automate this process.
+- The `setup.py` script in the lib directory is responsible for setting up the environment by installing the necessary Python packages. It uses the `AutoInstaller` class to automate this process. The `AutoInstaller` class also manages the parameters for the booking, adds the application to the system startup, and provides options to remove the application from the system startup and delete all related files, reinstall the application, and upgrade the application to the latest version.
 
-- The `installer.py` script utilizes the `AutoInstaller` class from the `lib/setup.py` module to automate the installation of required modules and adds the application to the system startup. It accepts two required arguments: `--location` and `--floor`, which are used to specify the location for the booking and the preferred floor number.
+- The `installer.py` script utilizes the `AutoInstaller` class from the `lib/setup.py` module to automate the installation of required modules and adds the application to the system startup. It accepts two required arguments: `--location` and `--floor`, which are used to specify the location for the booking and the preferred floor number. It also accepts optional arguments for booking preferences, uninstalling the service, reinstalling the application, and upgrading the application to the latest version.
 
-- The `paths.py` script in the lib directory defines the file paths used throughout the project, such as the log file path and the requirements file path.
+- The `paths.py` script in the lib directory defines the file paths used throughout the project, such as the log file path, the requirements file path, the installation log path, and the parameters file path. It also defines the paths for the log folder, scripts folder, and parameters folder.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
