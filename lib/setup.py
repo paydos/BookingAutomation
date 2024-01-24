@@ -36,14 +36,14 @@ class AutoInstaller:
             self.logger.error('Failed to add script to startup: ' + str(e.__class__.__name__))
 
     # This method sets the parameters for the booking.
-    def parameters(self, location, floor, monitor=False, heightdesk=False):
-        if location is None or floor is None:
-            raise ValueError("Location and floor cannot be None.")
+    def parameters(self, **kwargs):
+        if not kwargs.get("location") or not kwargs.get("floor"):
+            raise ValueError("Both location and floor must be provided.")
         with open(parameters_file_path, 'w') as params_file:
-            params_file.write(f'location="{location}"\n')
-            params_file.write(f'floor={floor}\n')
-            params_file.write(f'monitor={monitor}\n')
-            params_file.write(f'heightdesk={heightdesk}\n')
+            params_file.write(f'location="{kwargs["location"]}"\n')
+            params_file.write(f'floor={kwargs["floor"]}\n')
+            params_file.write(f'monitor={kwargs["monitor"]}\n')
+            params_file.write(f'heightdesk={kwargs["heightdesk"]}\n')
     
     # This method removes the application from the system startup and deletes all related files.
     def remove(self, arg):
@@ -56,3 +56,23 @@ class AutoInstaller:
                 self.logger.info('All files removed successfully.')
             except Exception as e:
                 self.logger.error('Failed to remove files: ' + str(e.__class__.__name__))
+                
+    def reinstall(self, reinstall):
+        if reinstall:
+            try:
+                # Remove old VBS
+                os.remove(os.path.expandvars(r'%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\BookingAutomation.vbs'))
+                
+                # Remove .bat file
+                os.remove(os.path.join(self.file_path, 'BookingAutomation.bat'))
+                
+                # Maybe add a git pull and discard changes?
+                # Pull from main, overwrite everything and delete if necessary
+                os.system('git fetch origin')
+                os.system('git reset --hard origin/main')
+                os.system('git clean -fd')
+
+                
+            except Exception as e:
+                self.logger.error('Failed to remove reinstall the BookingAutomation service: ' + str(e.__class__.__name__))
+

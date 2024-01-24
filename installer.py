@@ -12,6 +12,7 @@ parser.add_argument('--floor', type=int, required=True, help='Specify the prefer
 parser.add_argument('--heightdesk', type=bool, default=False, help='Optional argument. If set to True, it will book an adjustable height desk. Default is False.')
 parser.add_argument('--monitor', type=bool, default=False, help='Optional argument. If set to True, it will book a high resolution monitor. Default is False.')
 parser.add_argument('--remove', type=bool, default=False, help='Optional argument. If set to True, it will remove the service from startup and delete all related files. Default is False.')
+parser.add_argument('--reinstall', type=bool, default=False, help='Optional argument. If set to True, it will reinstall with the updates. Default is False.')
 args = parser.parse_args()
 
 location = args.location
@@ -19,6 +20,7 @@ floor = args.floor
 remove = args.remove 
 monitor = args.monitor
 heightdesk = args.heightdesk
+reinstall = args.reinstall
 
 
 # Check if log folder exists
@@ -56,7 +58,15 @@ installer.remove(arg=remove)
 
 # Install required modules
 logging.info('Starting installation of required modules.')
+
+# Check if user wants to reinstall
+
+# Install otherwise
+if reinstall:
+    installer.reinstall(reinstall)
+
 installer.install()
+    
 logging.info('Installation of required modules completed.')
 
 # Add the application to the system startup
@@ -65,5 +75,5 @@ installer.add_to_startup()
 logging.info('Application added to system startup successfully.')
 
 logging.info('Setting parameters: location - {}, floor - {}'.format(location, floor))
-installer.parameters(location, floor, monitor, heightdesk)
+installer.parameters(location=location, floor=floor, monitor=monitor, heightdesk=heightdesk)
 logging.info('Parameters set successfully.')
