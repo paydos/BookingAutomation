@@ -119,12 +119,14 @@ To get a local copy up and running follow these simple steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-To simplify the setup process on Windows, you don't need to manually create a service. Instead, you can run the `installer.py` script which automates the installation and setup of the necessary services and dependencies. Here's how to use it:
+The `installer.py` script simplifies the setup process by automating the installation and setup of necessary services and dependencies. Here's how to use it:
 
-1. Execute the `installer.py` script with required `--location` and `--floor` arguments. Optional arguments include `--heightdesk` and `--monitor` for booking preferences, and `--remove` to uninstall the service. This script performs the following:
+1. Run the `installer.py` script with the required `--location` and `--floor` arguments. Additional optional arguments include `--heightdesk` and `--monitor` for booking preferences, `--remove` to uninstall the service, `--reinstall` to reinstall the application, and `--upgrade` to upgrade the application to the latest version. This script performs the following tasks:
    - Installs necessary Python packages from `requirements.txt`.
    - Sets up the BookingAutomation service to run at startup.
    - Configures booking location and floor parameters.
+   - Reinstalls the application if `--reinstall` is set to True. This will remove the current installation and install it again, ensuring you have a clean setup.
+   - Upgrades the application to the latest version if `--upgrade` is set to True. This will fetch the latest version from the repository and replace your current version with it.
 
 To run the installer with custom location and floor:
    ```sh
@@ -133,7 +135,18 @@ To run the installer with custom location and floor:
    
 To run the installer with custom location, floor, and optional parameters:
    ```sh
-   python installer.py --location "Your Location" --floor YourFloorNumber --heightdesk True --monitor True --remove False
+   python installer.py --location "Your Location" --floor YourFloorNumber --heightdesk True --monitor True
+   ```
+
+To reinstall the application with a new location and floor (useful for changing locations or fixing bugs). You can also include optional parameters:
+   ```sh
+   python installer.py --location "New Location" --floor NewFloorNumber --heightdesk True --monitor True --reinstall True
+   ```
+
+
+To only upgrade the application:
+   ```sh
+   python installer.py --upgrade True
    ```
 
 2. After the `installer.py` script has finished running, simply reboot your computer. Upon startup, the BookingAutomation service will automatically run in the background without any further action required from you.
@@ -141,6 +154,7 @@ To run the installer with custom location, floor, and optional parameters:
 This approach eliminates the need for manual configuration and ensures that all necessary components are correctly installed and configured.
 
 _For more examples, please refer to the [Documentation](https://github.com/paydos/BookingAutomation)_
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -153,8 +167,9 @@ _For more examples, please refer to the [Documentation](https://github.com/paydo
  - [X] Introduce user-configurable settings during installation to set preferred location and floor.
  - [ ] Address the issue where the automated driver update process stalls if Chrome is already running.
  - [X] Update logging (Log file generates too much data)
- - [X] Add reinstaller (With automatic pull from repo main)
-
+ - [X] Add reinstaller
+ - [X] Add automatic upgrader
+ 
 See the [open issues](https://github.com/paydos/BookingAutomation/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
