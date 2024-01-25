@@ -45,11 +45,13 @@ class BookingAutomation:
         # Set up chrome profile (Use Default)
         self.logger.info('Creating Google Chrome Driver')
         options = uc.ChromeOptions()
+        options.add_argument("--no-first-run")  # Suppress the first run dialog
+        options.add_argument("--no-default-browser-check")  # Skip the default browser check
         options.add_argument("--verbose")
         options.add_argument("--headless")
         
         # For Linux - testing
-        #options.add_argument("--user-data-dir=/home/$USER/.config/google-chrome/") # Change the path according to your system
+        #options.add_argument("--user-data-dir=/home/ruiz/.config/google-chrome/") # Change the path according to your system
         #options.add_argument("--profile-directory=Profile 1") # Change to Profile 1 for testing 
         
         # For Windows
@@ -57,7 +59,7 @@ class BookingAutomation:
         user_data_dir = os.path.expanduser('~\\AppData\\Local\\Google\\Chrome\\User Data')
         options.add_argument(f"--user-data-dir={user_data_dir}")  # Path updated to use the current Windows user's profile
         options.add_argument("--profile-directory=Default")  # Change to Profile 1 for testing
-        self.driver = uc.Chrome(options=options)
+        self.driver = uc.Chrome(options=options, version_main=120)
 
         # Maximize the window
         self.logger.info('Maximizing window...')
