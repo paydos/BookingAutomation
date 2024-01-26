@@ -17,7 +17,7 @@ class BookingAutomation:
         self.logger = logging.getLogger(__name__)
 
         
-        # date convention = 2024-01-17 15:30:00
+        # Date parameters - Day selector
         self.date = DateCalculator()
         if day == 1:
             self.date = self.date.get_next_tuesday()
@@ -26,6 +26,7 @@ class BookingAutomation:
         else:
             raise ValueError()
         
+        # Time parameters - Time selector
         self.adapter = DateAdapter(self.date)
         self.start_time = self.adapter.start()
         self.finish_time = self.adapter.finish()    
@@ -36,7 +37,8 @@ class BookingAutomation:
         self.location = location
         self.floor = floor
 
-
+        #* TODO: FIX FEATURE TO INDICATE THE USER THE BOOKED PLACE
+        #* To do this we could instead of getting the info before booking, do it once it's been booked: Screen's cleaner and could be easier.
         self.bookingInfo = {
             'Desk Location': None,
             'Floor and Address': None
@@ -131,7 +133,7 @@ class BookingAutomation:
             self.logger.info(f'Start time default to {self.start_time} ')
             start_time_box = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[3]/div[2]/div[1]/input')
             start_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
-            time.sleep(0.1)
+            time.sleep(1)
             start_time_box.send_keys(self.start_time)
             time.sleep(0.5)
         except Exception as e:
@@ -143,7 +145,9 @@ class BookingAutomation:
             self.logger.info(f'Finish time default to {self.finish_time}')
             finish_time_box = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/div/div/sp-page-row/div/div/span/div/div/div/div[2]/div[1]/iwms-wsd-search-filter/div[3]/div[1]/div/section[1]/div/div/div[2]/div[4]/div/div[1]/input')
             finish_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
-            time.sleep(0.1)
+            time.sleep(1)
+            
+            #!! There is a big in the finish_time (Should enter 17:00:00 and persist, yet it enters 10:00:00)
             finish_time_box.send_keys(self.finish_time)  # Insert the finish time
             time.sleep(0.5)
         except Exception as e:
