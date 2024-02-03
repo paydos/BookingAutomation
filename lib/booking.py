@@ -147,9 +147,17 @@ class BookingAutomation:
             finish_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
             time.sleep(1)
             
-            #!! There is a big in the finish_time (Should enter 17:00:00 and persist, yet it enters 10:00:00)
+            #!! There's a bg in the finish_time (Should enter 17:00:00 and persist, yet it enters 10:00:00)
+            finish_time_box.send_keys(self.finish_time)  # Insert the finish time
+            time.sleep(1)
+            
+            #! Reentering the time may fix the issue? Fuck knows
+            finish_time_box.send_keys(Keys.CONTROL + "a")  # Select all text in the box
+            time.sleep(1)
+            
             finish_time_box.send_keys(self.finish_time)  # Insert the finish time
             time.sleep(0.5)
+            
         except Exception as e:
             self.logger.error(f'Failed to choose finish time: {e.__class__.__name__}')
         

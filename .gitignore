@@ -1,9 +1,9 @@
-test/
+tests/
 **/__pycache__/
 venv/
 Pipfile
 example.md
 *.bat
-parameters
 *.vbs
 log
+params

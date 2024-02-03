@@ -3,7 +3,7 @@ import logging
 from lib.booking import BookingAutomation
 from lib.date import today
 from lib.paths import log_file_path
-from lib.cron import cron
+from lib.cron import Cron
 
 
 def job():
@@ -52,8 +52,9 @@ def job():
 def main():
     logging.basicConfig(force=True, filename=log_file_path, level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
     logging.info('Booking automation service initialised.')
-       
-    cron(job=job)
+    
+    cronTask = Cron()
+    cronTask.cron(job)
 
 
 

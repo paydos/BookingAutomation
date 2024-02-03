@@ -51,12 +51,12 @@ class DateAdapter:
         
     def start(self):
         return self.date.replace(hour=9, minute=0, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:%S')
-        pass
+        
     
     
     def finish(self):
         return self.date.replace(hour=17, minute=0, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:%S')
-        pass
+        
 
 
 

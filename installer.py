@@ -37,7 +37,7 @@ else:
 # Configure logging
 logging.basicConfig(filename=install_log_path, level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 
-
+#* All the mkdirs should be moved as a private method to make it cleaner (No need to have it here)
 # Check if the other folders exist
 if not os.path.exists(scripts_folder):
     os.makedirs(scripts_folder)
@@ -50,6 +50,7 @@ if not os.path.exists(parameters_folder):
     logging.info('Parameters folder created at {}'.format(parameters_folder))
 else:
     logging.info('Parameters folder already exists at {}'.format(parameters_folder))
+    
 
 
 
