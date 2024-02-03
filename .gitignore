@@ -1,0 +1,9 @@
+tests/
+**/__pycache__/
+venv/
+Pipfile
+example.md
+*.bat
+*.vbs
+log
+params
