@@ -35,6 +35,9 @@ I'm pleased to announce that this project now supports worldwide locations. This
 
 Thank you for your interest in this project. I'm looking forward to hearing your feedback and suggestions.
 
+Please note that paths have been anonymized upon request, and I apologise for any inconvenience this may cause. However, feel free to contact me for any inquiries.
+
+
 <!-- PROJECT SHIELDS -->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
